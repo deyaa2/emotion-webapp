@@ -1,29 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Emotion Recognition</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        img { max-width: 300px; margin-top: 20px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e0eafc, #cfdef3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 50px 20px;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #1f3b4d;
+        }
+
+        .instructions {
+            background-color: #ffffffcc;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: left;
+            max-width: 600px;
+            line-height: 1.8;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        label {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+            font-size: 1em;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        button {
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        img {
+            margin-top: 30px;
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            margin-top: 40px;
+            color: #1f3b4d;
+        }
+
+        p {
+            font-size: 1.2em;
+            font-weight: bold;
+            background: #ffffffcc;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
-    <h1>Upload a Face Image</h1>
+    <h1>Emotion Recognition</h1>
+
+    <div class="instructions">
+        <strong>How to use:</strong>
+        <ul>
+            <li>Click "Choose File" to select a face image from your device.</li>
+            <li>Click "Analyze Emotion" to upload and analyze the image.</li>
+            <li>The uploaded image and detected emotion will appear below.</li>
+        </ul>
+    </div>
+
     <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*" required>
-        <br><br>
+        <label for="image">Select a face image to analyze:</label>
+        <input type="file" name="image" id="image" accept="image/*" required>
+        <br>
         <button type="submit">Analyze Emotion</button>
     </form>
 
     {% if image %}
-        <h2>Uploaded Image:</h2>
+        <h2>Uploaded Image</h2>
         <img src="{{ image }}" alt="Uploaded Image">
     {% endif %}
 
     {% if emotion %}
-        <h2>Detected Emotion:</h2>
+        <h2>Detected Emotion</h2>
         <p>{{ emotion }}</p>
     {% endif %}
 </body>
 </html>
-
