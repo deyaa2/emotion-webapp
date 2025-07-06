@@ -1,27 +1,25 @@
-from flask import Flask, render_template, request, jsonify
-from fer import FER
-import numpy as np
 import cv2
-import base64
+from deepface import DeepFace
 
-app = Flask(__name__)
-detector = FER()
+cap = cv2.VideoCapture(0)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
 
-@app.route('/analyze', methods=['POST'])
-def analyze():
-    data = request.json['image']
-    encoded_data = data.split(',')[1]
-    img_data = base64.b64decode(encoded_data)
-    np_arr = np.frombuffer(img_data, np.uint8)
-    img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+    try:
+        result = DeepFace.analyze(frame, actions=['emotion'], enforce_detection=False)
+        emotion = result[0]['dominant_emotion']
+        cv2.putText(frame, f'Emotion: {emotion}', (30, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    except Exception as e:
+        print(f"Error: {e}")
 
-    emotion, score = detector.top_emotion(img)
-    response = {'emotion': emotion if emotion else 'No face', 'score': round(score, 2) if score else 0}
-    return jsonify(response)
+    cv2.imshow("Face Expression Recognition", frame)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
