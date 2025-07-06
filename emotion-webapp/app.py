@@ -1,27 +1,36 @@
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress INFO and WARNING logs
-import cv2
+from flask import Flask, render_template, request
 from deepface import DeepFace
+import cv2
+import numpy as np
 
-cap = cv2.VideoCapture(0)
+app = Flask(__name__)
 
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
+UPLOAD_FOLDER = 'static/uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-    try:
-        result = DeepFace.analyze(frame, actions=['emotion'], enforce_detection=False)
-        emotion = result[0]['dominant_emotion']
-        cv2.putText(frame, f'Emotion: {emotion}', (30, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-    except Exception as e:
-        print(f"Error: {e}")
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    emotion = None
+    image_path = None
 
-    cv2.imshow("Face Expression Recognition", frame)
+    if request.method == 'POST':
+        file = request.files['image']
+        if file:
+            filename = file.filename
+            image_path = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(image_path)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+            try:
+                # Read image and analyze
+                img = cv2.imread(image_path)
+                result = DeepFace.analyze(img, actions=['emotion'], enforce_detection=False)
+                emotion = result[0]['dominant_emotion']
+            except Exception as e:
+                emotion = f"Error: {str(e)}"
 
-cap.release()
-cv2.destroyAllWindows()
+    return render_template('index.html', emotion=emotion, image=image_path)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
