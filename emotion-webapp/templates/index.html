@@ -13,7 +13,7 @@
             justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
-            padding: 50px 20px;
+            padding: 50px 20px 100px;
             color: #333;
         }
 
@@ -97,6 +97,18 @@
             border-radius: 8px;
             display: inline-block;
         }
+
+        footer {
+            margin-top: auto;
+            padding: 30px 0 10px;
+            text-align: center;
+            font-size: 0.95em;
+            color: #555;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            position: fixed;
+            bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -127,5 +139,9 @@
         <h2>Detected Emotion</h2>
         <p>{{ emotion }}</p>
     {% endif %}
+
+    <footer>
+        Created by: <strong>ضياء الدين زياد أحمد</strong> &nbsp;|&nbsp; Student ID: <strong>120210391</strong>
+    </footer>
 </body>
 </html>
