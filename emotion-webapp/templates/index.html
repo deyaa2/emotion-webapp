@@ -1,15 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Face Emotion Detection</title>
+    <title>Emotion Recognition</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        img { max-width: 300px; margin-top: 20px; }
+    </style>
 </head>
 <body>
-    <h1>Real-Time Emotion Detection</h1>
-    <video id="video" width="640" height="480" autoplay muted></video>
-    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-    <p id="result">Emotion: Detecting...</p>
+    <h1>Upload a Face Image</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <br><br>
+        <button type="submit">Analyze Emotion</button>
+    </form>
 
-    <script src="/static/script.js"></script>
+    {% if image %}
+        <h2>Uploaded Image:</h2>
+        <img src="{{ image }}" alt="Uploaded Image">
+    {% endif %}
+
+    {% if emotion %}
+        <h2>Detected Emotion:</h2>
+        <p>{{ emotion }}</p>
+    {% endif %}
 </body>
 </html>
+
